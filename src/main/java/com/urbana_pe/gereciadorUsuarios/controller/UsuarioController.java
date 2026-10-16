@@ -1,7 +1,8 @@
 package com.urbana_pe.gereciadorUsuarios.controller;
 
+import com.urbana_pe.gereciadorUsuarios.business.dtos.UsuarioDTO;
 import com.urbana_pe.gereciadorUsuarios.infrastructure.entity.Usuario;
-import com.urbana_pe.gereciadorUsuarios.service.UsuarioService;
+import com.urbana_pe.gereciadorUsuarios.business.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,25 +19,23 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> consultarUsuarios(@RequestParam(value = "email", required = false)
+    public ResponseEntity<List<UsuarioDTO>> consultarUsuarios(@RequestParam(value = "email", required = false)
                                                                String email) {
         if(email != null && !email.isEmpty()) {
-            List<Usuario> usuarios = usuarioService.buscarPorEmail(email);
-            return ResponseEntity.ok(usuarios);
+            return ResponseEntity.ok(usuarioService.consultarUsuarios());
         }
-
-        List<Usuario> usuarios = usuarioService.consultarUsuarios();
-        return ResponseEntity.ok(usuarios);
+        return ResponseEntity.ok(usuarioService.consultarUsuarios());
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> incluirUsuario(@RequestBody Usuario usuario){
-        return ResponseEntity.ok(usuarioService.incluirUsuario(usuario));
+    public ResponseEntity<UsuarioDTO> incluirUsuario(@RequestBody UsuarioDTO usuarioDTO){
+        UsuarioDTO novoUsuario = usuarioService.incluirUsuario(usuarioDTO);
+        return ResponseEntity.ok(novoUsuario);
     }
 
     @PutMapping
-    public ResponseEntity<Usuario> atualizarUsuario(@RequestParam Long id, @RequestBody Usuario usuario){
-        return ResponseEntity.ok(usuarioService.alterarUsuario(id, usuario));
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@RequestParam Long id, @RequestBody UsuarioDTO dto){
+        return ResponseEntity.ok(usuarioService.alterarUsuario(id, dto));
     }
 
     @DeleteMapping
