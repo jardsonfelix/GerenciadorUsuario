@@ -44,6 +44,30 @@ public class UsuarioService {
 
     }
 
+    public UsuarioDTO autenticar(String email, String senha) {
+        if (email == null || senha == null) {
+            throw new RuntimeException("Email ou senha não enviados pelo front");
+        }
+        List<Usuario> usuarios = usuarioRepository.findByEmail(email.trim());
+        if (usuarios.isEmpty()) {
+            throw new RuntimeException("Usuário não encontrado: " + email);
+        }
+        Usuario usuario = usuarios.get(0);
+
+        if (usuario.getSenha() == null) {
+            throw new RuntimeException("Senha inválida. Tente cadastrar novamente.");
+        }
+        if (!usuario.getSenha().trim().equals(senha.trim())) {
+            throw new RuntimeException("Senha inválida");
+        }
+        UsuarioDTO dto = new UsuarioDTO();
+        dto.setId(usuario.getId());
+        dto.setNome(usuario.getNome());
+        dto.setEmail(usuario.getEmail());
+        dto.setSenha(null); // não retorna senha por segurança
+        return dto;
+    }
+
     public void removerUsuario(Long id){
        usuarioRepository.deleteById(id);
     }

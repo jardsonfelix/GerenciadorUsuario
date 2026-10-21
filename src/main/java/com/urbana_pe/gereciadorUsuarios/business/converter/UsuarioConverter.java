@@ -13,9 +13,12 @@ public class UsuarioConverter {
     //converter de UsuarioDTO para UsuarioEntity
 
     public Usuario paraUsuarioEntity(UsuarioDTO usuarioDTO) {
+        System.out.println("CONVERTER - DTO SENHA: " + usuarioDTO.getSenha());
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioDTO.getNome());
         usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setSenha(usuarioDTO.getSenha());
+        System.out.println("CONVERTER - ENTITY SENHA: " + usuario.getSenha());
         return usuario;
 
     }
