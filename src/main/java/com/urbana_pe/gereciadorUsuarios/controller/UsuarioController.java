@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -29,18 +31,34 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> incluirUsuario(@RequestBody UsuarioDTO usuarioDTO){
+        System.out.println("CONTROLLER - CHEGOU DO ANGULAR: " + usuarioDTO.getEmail()
+                + " SENHA: " + usuarioDTO.getSenha());
         UsuarioDTO novoUsuario = usuarioService.incluirUsuario(usuarioDTO);
         return ResponseEntity.ok(novoUsuario);
     }
 
-    @PutMapping
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@RequestParam Long id, @RequestBody UsuarioDTO dto){
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO dto){
         return ResponseEntity.ok(usuarioService.alterarUsuario(id, dto));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> excluirUsuario(@RequestParam Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirUsuario(@PathVariable Long id){
         usuarioService.removerUsuario(id);
         return ResponseEntity.ok().build();
+    }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<UsuarioDTO> login(@RequestBody Map<String, String> body) {
+
+        String email = body.get("email");
+        String senha = body.get("senha");
+
+        System.out.println("MAP - EMAIL: " + email + " SENHA: " + senha);
+
+        UsuarioDTO usuarioLogado = usuarioService.autenticar(email, senha);
+
+        return ResponseEntity.ok(usuarioLogado);
     }
 }

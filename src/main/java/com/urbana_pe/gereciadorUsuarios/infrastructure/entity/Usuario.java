@@ -12,14 +12,16 @@ public class Usuario {
     private Long id;
     @Column(name= "nome")
     private String nome;
-    @Column(name="email", unique = true)
+    @Column(name="email", nullable = false, unique = true)
     private String email;
-    @Column(name="senha", unique = true)
+    @Column(name="senha", nullable = false)
     private String senha;
 
     public Long getId() {
         return id;
     }
+
+    public void setId(Long id) {}
 
     public String getNome() {
         return nome;
